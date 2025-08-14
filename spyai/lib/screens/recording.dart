@@ -211,12 +211,12 @@ class _RecordingScreenState extends State<RecordingScreen> {
     }
 
     final directory = await getTemporaryDirectory();
-    _currentAudioPath = '${directory.path}/spy_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    _currentAudioPath = '${directory.path}/spy_${DateTime.now().millisecondsSinceEpoch}.wav';
 
     // HIGH QUALITY SETTINGS FOR SPY RECORDING
     await _recorder.start(
       const RecordConfig(
-        encoder: AudioEncoder.aacLc,
+        encoder: AudioEncoder.wav,
         bitRate: 128000,        // Higher quality for distant voices
         sampleRate: 44100,      // CD quality for better distant sound capture
         numChannels: 1,         // Mono saves space but maintains quality
@@ -258,11 +258,11 @@ class _RecordingScreenState extends State<RecordingScreen> {
     
     // Start new chunk
     final directory = await getTemporaryDirectory();
-    _currentAudioPath = '${directory.path}/spy_chunk_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    _currentAudioPath = '${directory.path}/spy_chunk_${DateTime.now().millisecondsSinceEpoch}.wav';
     
     await _recorder.start(
       const RecordConfig(
-        encoder: AudioEncoder.aacLc,
+        encoder: AudioEncoder.wav,
         bitRate: 128000,
         sampleRate: 44100,
         numChannels: 1,
@@ -295,7 +295,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
       
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://YOUR_SERVER_URL/upload-audio'),
+        Uri.parse('https://721f9a3a332b.ngrok-free.app/recording-transcript'),
       );
       
       request.fields['timestamp'] = DateTime.now().toIso8601String();
