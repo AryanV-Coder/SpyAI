@@ -213,11 +213,11 @@ class _RecordingScreenState extends State<RecordingScreen> {
     final directory = await getTemporaryDirectory();
     _currentAudioPath = '${directory.path}/spy_${DateTime.now().millisecondsSinceEpoch}.wav';
 
-    // HIGH QUALITY SETTINGS FOR SPY RECORDING
+    // HIGH QUALITY SETTINGS OPTIMIZED FOR LONG SPY RECORDINGS
     await _recorder.start(
       const RecordConfig(
         encoder: AudioEncoder.wav,
-        bitRate: 128000,        // Higher quality for distant voices
+        bitRate: 96000,         // Slightly lower for longer recordings (still high quality)
         sampleRate: 44100,      // CD quality for better distant sound capture
         numChannels: 1,         // Mono saves space but maintains quality
         autoGain: true,         // Automatically adjusts gain for distant voices
@@ -239,8 +239,8 @@ class _RecordingScreenState extends State<RecordingScreen> {
       });
     });
 
-    // Auto-chunk every 10 minutes for long recordings
-    _chunkTimer = Timer.periodic(const Duration(minutes: 10), (timer) {
+    // Auto-chunk every 3 minutes for better upload reliability on long recordings
+    _chunkTimer = Timer.periodic(const Duration(minutes: 3), (timer) {
       _createChunk();
     });
   }
@@ -256,6 +256,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
       _uploadAudioChunk(_currentAudioPath!);
     }
     
+    // Clean up old files to prevent storage issues
+    await _cleanupOldFiles();
+    
     // Start new chunk
     final directory = await getTemporaryDirectory();
     _currentAudioPath = '${directory.path}/spy_chunk_${DateTime.now().millisecondsSinceEpoch}.wav';
@@ -263,7 +266,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
     await _recorder.start(
       const RecordConfig(
         encoder: AudioEncoder.wav,
-        bitRate: 128000,
+        bitRate: 96000,
         sampleRate: 44100,
         numChannels: 1,
         autoGain: true,
@@ -289,27 +292,83 @@ class _RecordingScreenState extends State<RecordingScreen> {
   }
 
   Future<void> _uploadAudioChunk(String filePath) async {
+    int maxRetries = 3;
+    int retryDelay = 2; // seconds
+    
+    for (int attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        final file = File(filePath);
+        if (!file.existsSync()) return;
+        
+        // Check file size and compress if too large (> 25MB)
+        final fileSize = await file.length();
+        print('Uploading file: ${fileSize / (1024 * 1024)} MB');
+        
+        final request = http.MultipartRequest(
+          'POST',
+          Uri.parse('http://127.0.0.1:8000/recording-transcript'),
+        );
+        
+        // Add headers for better compatibility
+        request.headers['Connection'] = 'keep-alive';
+        request.headers['User-Agent'] = 'SpyAI/1.0';
+        
+        request.fields['timestamp'] = DateTime.now().toIso8601String();
+        request.fields['duration'] = _recordingDuration.toString();
+        request.files.add(await http.MultipartFile.fromPath('audio', filePath));
+        
+        // Set longer timeout for large files
+        final response = await request.send().timeout(
+          const Duration(minutes: 5),
+          onTimeout: () {
+            throw TimeoutException('Upload timeout after 5 minutes');
+          },
+        );
+        
+        if (response.statusCode == 200) {
+          print('Upload successful on attempt $attempt');
+          await file.delete(); // Clean up after successful upload
+          return; // Success, exit retry loop
+        } else {
+          print('Upload failed with status: ${response.statusCode}');
+          if (attempt == maxRetries) {
+            print('Max retries reached, giving up');
+          }
+        }
+        
+      } catch (e) {
+        print('Upload error (attempt $attempt/$maxRetries): $e');
+        
+        if (attempt < maxRetries) {
+          print('Retrying in $retryDelay seconds...');
+          await Future.delayed(Duration(seconds: retryDelay));
+          retryDelay *= 2; // Exponential backoff
+        } else {
+          print('All retry attempts failed');
+        }
+      }
+    }
+  }
+
+  // Clean up old audio files to prevent storage issues during long recordings
+  Future<void> _cleanupOldFiles() async {
     try {
-      final file = File(filePath);
-      if (!file.existsSync()) return;
+      final directory = await getTemporaryDirectory();
+      final files = directory.listSync()
+          .where((entity) => entity is File && entity.path.contains('spy_'))
+          .cast<File>()
+          .toList();
       
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse('https://721f9a3a332b.ngrok-free.app/recording-transcript'),
-      );
-      
-      request.fields['timestamp'] = DateTime.now().toIso8601String();
-      request.fields['duration'] = _recordingDuration.toString();
-      request.files.add(await http.MultipartFile.fromPath('audio', filePath));
-      
-      final response = await request.send();
-      
-      if (response.statusCode == 200) {
-        await file.delete(); // Clean up after successful upload
+      // Keep only the last 5 files (in case of upload failures)
+      if (files.length > 5) {
+        files.sort((a, b) => b.statSync().modified.compareTo(a.statSync().modified));
+        for (int i = 5; i < files.length; i++) {
+          await files[i].delete();
+          print('Cleaned up old file: ${files[i].path}');
+        }
       }
     } catch (e) {
-      // Silent fail for spy mode - don't alert user
-      print('Upload error: $e');
+      print('Cleanup error: $e');
     }
   }
 

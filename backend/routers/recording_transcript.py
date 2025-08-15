@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile,File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 import base64
 import google.generativeai as genai
 import os
@@ -14,7 +14,7 @@ router = APIRouter()
 @router.post("/recording-transcript")
 async def recording_transcript(audio : UploadFile = File(None)):
     if audio is None:
-        return
+        raise HTTPException(status_code=400, detail="No audio file provided")
 
     audio_data = await audio.read()
 
@@ -51,6 +51,8 @@ async def recording_transcript(audio : UploadFile = File(None)):
 
     # Saving File for Debugging
     os.makedirs("minutes",exist_ok=True)
-    with open(f"minutes/{datetime.now()}.md",'w') as f:
+    with open(f"minutes/{datetime.datetime.now()}.md",'w') as f:
         f.write(response.text)
+    
+    return {"status": "success", "transcript": response.text}
 

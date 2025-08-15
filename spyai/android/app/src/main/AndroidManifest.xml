@@ -1,4 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Audio Recording Permissions -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MICROPHONE" />
+    
+    <!-- Storage Permissions for saving audio files -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    
+    <!-- Network Permissions for uploading files -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Optional: Wake lock to keep recording in background -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
+    <!-- Feature declarations -->
+    <uses-feature 
+        android:name="android.hardware.microphone" 
+        android:required="true" />
+    
     <application
         android:label="spyai"
         android:name="${applicationName}"

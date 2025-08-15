@@ -45,5 +45,53 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Microphone Permission for Audio Recording -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to the microphone to record audio for spy meetings and generate transcripts.</string>
+	
+	<!-- Photo Library Access (for saving files to Photos if needed) -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app may save audio recordings to your photo library for backup purposes.</string>
+	
+	<!-- Photo Library Add Permission (iOS 11+) -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app may save audio recordings to your photo library for backup purposes.</string>
+	
+	<!-- Documents Directory Access -->
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>This app needs to save audio recordings temporarily before uploading them.</string>
+	
+	<!-- Local Network Access (iOS 14+) for local server connections -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app needs local network access to upload recordings to your server.</string>
+	
+	<!-- Background App Refresh for background recording -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>background-processing</string>
+		<string>background-fetch</string>
+	</array>
+	
+	<!-- Allow HTTP connections (if not using HTTPS) -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>127.0.0.1</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>
