@@ -1,13 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 import base64
-import google.generativeai as genai
 import os
-from dotenv import load_dotenv
 import datetime
-
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-2.5-flash")
+from utils.gemini import model
 
 router = APIRouter()
 
@@ -31,7 +26,31 @@ async def recording_transcript(audio : UploadFile = File(None)):
             "parts": [
                 {
                     "text": (
-                            "Make Minutes of the Meeting audio provided in proper markdown format. I don't want any extra metadata. Just the Minutes of the meeting should be given as the response. No comments, only minutes!!"
+                        "You are an advanced transcription system. Follow these rules strictly:\n\n"
+                        "1. Input: An audio file in Hindi, English, or Hinglish (a natural mix of Hindi + English).\n\n"
+                        "2. Task: Generate a transcript **exactly as spoken**, without translation, grammar correction, or language modification.\n"
+                        "   - Hindi → always in Devanagari script (हिंदी).\n"
+                        "   - English → always in English script.\n"
+                        "   - Hinglish (mixed) → preserve exactly as spoken, don't normalize.\n\n"
+                        "3. Preserve natural speech:\n"
+                        "   - Keep fillers (umm, uh, arre, etc.), repetitions, informal words, and incomplete sentences.\n"
+                        "   - Mark non-verbal sounds or events in brackets: [pause], [laughs], [music], [noise].\n\n"
+                        "4. Speaker Handling:\n"
+                        "   - Label speakers as Person 1, Person 2, etc.\n"
+                        "   - If clear from context (e.g., names), use actual names consistently.\n\n"
+                        "5. Long Audio Handling:\n"
+                        "   - Break transcript into **chunks of 3–5 minutes** or logical speech segments.\n"
+                        "   - Never cut off mid-sentence.\n"
+                        "   - After each chunk, insert:\n"
+                        "     --- [Transcript Continued] ---\n"
+                        "   - Continue until the **entire audio is completely transcribed**.\n\n"
+                        "6. Continuation / Resume Handling:\n"
+                        "   - If audio is too long for one response, automatically continue in the next response from the exact point where the previous one stopped.\n"
+                        "   - Always maintain speaker labels and formatting.\n\n"
+                        "7. Output Format:\n"
+                        "   - Use clean **Markdown format**.\n"
+                        "   - Do NOT include summaries, metadata, explanations, or translations.\n"
+                        "   - Only return the raw transcript."
                     )
                 }
             ]
