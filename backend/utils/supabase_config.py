@@ -2,6 +2,7 @@ import psycopg2
 from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 # Load environment variables from .env
 load_dotenv()
@@ -29,10 +30,10 @@ def connect_postgres():
         cursor = connection.cursor()
         
         # Example query
-        cursor.execute("SELECT NOW();")
-        result = cursor.fetchone()
-        print("Current Time:", result)
-
+        cursor.execute("Insert into transcripts(timestamp,transcript) values('2025-08-18 23:22:33','HI')")
+        # result = cursor.fetchone()
+        # print("Current Time:", result)
+        connection.commit()
         # Close the cursor and connection
         cursor.close()
         connection.close()
