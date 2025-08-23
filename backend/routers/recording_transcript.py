@@ -77,8 +77,10 @@ async def recording_transcript(audio : UploadFile = File(None), current_time : s
     conn,cursor = connect_postgres()
 
     try :
-        query = f"INSERT INTO transcripts(timestamp,transcript) VALUES({current_time},{response.text})"
-        cursor.execute(query)
+        # Use parameterized query to prevent SQL injection
+        query = "INSERT INTO transcripts(timestamp, transcript) VALUES (%s, %s)"
+        cursor.execute(query, (current_time, response.text))
+        print("✅ Record Inserted Successfully !!")
     except Exception as e:
         print(e)
 

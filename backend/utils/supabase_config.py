@@ -24,7 +24,7 @@ def connect_postgres():
             port=PORT,
             database=DBNAME
         )
-        print("PostgreSQL connection successful!")
+        print("✅ PostgreSQL connection successful!")
         
         # Create a cursor to execute SQL queries
         cursor = connection.cursor()
