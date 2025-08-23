@@ -215,7 +215,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
     // Capture recording start timestamp in YYYY-MM-DD HH:MM:SS format
     final now = DateTime.now();
     _recordingStartTimestamp = '${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
-    
+    print(_recordingStartTimestamp);
     final directory = await getTemporaryDirectory();
     _currentAudioPath = '${directory.path}/spy_${DateTime.now().millisecondsSinceEpoch}.wav';
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 import base64
 import os
 import datetime
@@ -10,10 +10,13 @@ router = APIRouter()
 @router.post("/recording-transcript")
 async def recording_transcript(
     audio: UploadFile = File(None), 
-    recording_start_time: str = None,
+    recording_start_time: str = Form(None),
 ):
     if audio is None:
         raise HTTPException(status_code=400, detail="No audio file provided")
+
+    print(f"📅 Recording start time received: {recording_start_time}")
+    print(f"🎵 Audio file: {audio.filename}, size: {audio.size} bytes")
 
     audio_data = await audio.read()
 
@@ -31,7 +34,7 @@ async def recording_transcript(
                 {
                     "text": (
                         "You are an advanced transcription system. Follow these rules strictly:\n\n"
-                        "1. Input: An audio file in Hindi, English, or Hinglish (a natural mix of Hindi + English).\n\n"
+                        "1. Input: An audio file in Hinglish, English or Hindi.\n\n"
                         "2. Task: Generate a transcript **exactly as spoken**, without translation, grammar correction, or language modification.\n"
                         "   - Hindi → always in Devanagari script (हिंदी).\n"
                         "   - English → always in English script.\n"
