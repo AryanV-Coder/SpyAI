@@ -20,7 +20,7 @@
         android:required="true" />
     
     <application
-        android:label="spyai"
+        android:label="Spy AI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
