@@ -29,17 +29,17 @@ def connect_postgres():
         # Create a cursor to execute SQL queries
         cursor = connection.cursor()
         
-        # Example query
-        cursor.execute("Insert into transcripts(timestamp,transcript) values('2025-08-18 23:22:33','HI')")
-        # result = cursor.fetchone()
-        # print("Current Time:", result)
-        connection.commit()
-        # Close the cursor and connection
-        cursor.close()
-        connection.close()
-        print("Connection closed.")
+        # # Example query
+        # cursor.execute("Insert into transcripts(timestamp,transcript) values('2025-08-18 23:22:33','HI')")
+        # # result = cursor.fetchone()
+        # # print("Current Time:", result)
+        # connection.commit()
+        # # Close the cursor and connection
+        # cursor.close()
+        # connection.close()
+        # print("Connection closed.")
         
-        return True
+        return connection,cursor
 
     except Exception as e:
         print(f"Failed to connect to PostgreSQL: {e}")

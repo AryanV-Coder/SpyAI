@@ -3,11 +3,12 @@ import base64
 import os
 import datetime
 from utils.gemini import model
+from utils.supabase_config import connect_postgres
 
 router = APIRouter()
 
 @router.post("/recording-transcript")
-async def recording_transcript(audio : UploadFile = File(None)):
+async def recording_transcript(audio : UploadFile = File(None), current_time : str = None):
     if audio is None:
         raise HTTPException(status_code=400, detail="No audio file provided")
 
@@ -59,7 +60,7 @@ async def recording_transcript(audio : UploadFile = File(None)):
             "role": "user",
             "parts": [
                 {
-                    "mime_type": "audio/wav",
+                    "mime_type": "audio/aac",
                     "data": encoded_audio  # Base64 audio string
                 }
             ]
@@ -72,6 +73,18 @@ async def recording_transcript(audio : UploadFile = File(None)):
     os.makedirs("minutes",exist_ok=True)
     with open(f"minutes/{datetime.datetime.now()}.md",'w') as f:
         f.write(response.text)
+
+    conn,cursor = connect_postgres()
+
+    try :
+        query = f"INSERT INTO transcripts(timestamp,transcript) VALUES({current_time},{response.text})"
+        cursor.execute(query)
+    except Exception as e:
+        print(e)
+
+    conn.commit()
+    cursor.close()
+    conn.close()
     
     return {"status": "success", "transcript": response.text}
 
