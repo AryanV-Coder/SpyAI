@@ -458,7 +458,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                 ElevatedButton(
                   onPressed: _requestPermission,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: const Color.fromARGB(255, 158, 179, 39),
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   ),
                   child: const Text(
