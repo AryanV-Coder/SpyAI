@@ -8,7 +8,10 @@ from utils.supabase_config import connect_postgres
 router = APIRouter()
 
 @router.post("/recording-transcript")
-async def recording_transcript(audio : UploadFile = File(None), current_time : str = None):
+async def recording_transcript(
+    audio: UploadFile = File(None), 
+    recording_start_time: str = None,
+):
     if audio is None:
         raise HTTPException(status_code=400, detail="No audio file provided")
 
@@ -60,7 +63,7 @@ async def recording_transcript(audio : UploadFile = File(None), current_time : s
             "role": "user",
             "parts": [
                 {
-                    "mime_type": "audio/aac",
+                    "mime_type": "audio/wav",
                     "data": encoded_audio  # Base64 audio string
                 }
             ]
@@ -79,7 +82,7 @@ async def recording_transcript(audio : UploadFile = File(None), current_time : s
     try :
         # Use parameterized query to prevent SQL injection
         query = "INSERT INTO transcripts(timestamp, transcript) VALUES (%s, %s)"
-        cursor.execute(query, (current_time, response.text))
+        cursor.execute(query, (recording_start_time, response.text))
         print("✅ Record Inserted Successfully !!")
     except Exception as e:
         print(e)
@@ -89,4 +92,3 @@ async def recording_transcript(audio : UploadFile = File(None), current_time : s
     conn.close()
     
     return {"status": "success", "transcript": response.text}
-

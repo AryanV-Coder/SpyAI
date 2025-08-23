@@ -3,6 +3,7 @@ import 'package:record/record.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io';
 import 'dart:async';
 
@@ -22,6 +23,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
   int _recordingDuration = 0;
   Timer? _durationTimer;
   bool _hasPermission = false;
+  String? _recordingStartTimestamp; // Store recording start time in YYYY-MM-DD HH:MM:SS format
 
   @override
   void initState() {
@@ -210,6 +212,10 @@ class _RecordingScreenState extends State<RecordingScreen> {
       return;
     }
 
+    // Capture recording start timestamp in YYYY-MM-DD HH:MM:SS format
+    final now = DateTime.now();
+    _recordingStartTimestamp = '${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}';
+    
     final directory = await getTemporaryDirectory();
     _currentAudioPath = '${directory.path}/spy_${DateTime.now().millisecondsSinceEpoch}.wav';
 
@@ -304,17 +310,17 @@ class _RecordingScreenState extends State<RecordingScreen> {
         final fileSize = await file.length();
         print('Uploading file: ${fileSize / (1024 * 1024)} MB');
         
+        final baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://127.0.0.1:8000';
         final request = http.MultipartRequest(
           'POST',
-          Uri.parse('http://127.0.0.1:8000/recording-transcript'),
+          Uri.parse('$baseUrl/recording-transcript'),
         );
         
         // Add headers for better compatibility
         request.headers['Connection'] = 'keep-alive';
         request.headers['User-Agent'] = 'SpyAI/1.0';
         
-        request.fields['timestamp'] = DateTime.now().toIso8601String();
-        request.fields['duration'] = _recordingDuration.toString();
+        request.fields['recording_start_time'] = _recordingStartTimestamp!;
         request.files.add(await http.MultipartFile.fromPath('audio', filePath));
         
         // Set longer timeout for large files

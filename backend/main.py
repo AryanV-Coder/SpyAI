@@ -14,3 +14,8 @@ app.add_middleware(
 )
 
 app.include_router(recording_transcript.router)
+
+@app.get('/start-server')
+def start_server():
+    print("✅ Server Started Successfully !!")
+    return {'status':"success"}
