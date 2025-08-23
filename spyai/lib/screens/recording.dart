@@ -404,7 +404,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _isRecording ? Colors.red : (_hasPermission ? Colors.blue : Colors.grey),
+                  color: _isRecording ? Colors.red : (_hasPermission ? const Color.fromARGB(255, 2, 65, 121) : Colors.grey),
                   boxShadow: _isRecording ? [
                     BoxShadow(
                       color: Colors.red.withOpacity(0.3),
@@ -458,7 +458,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
                 ElevatedButton(
                   onPressed: _requestPermission,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 158, 179, 39),
+                    backgroundColor: const Color.fromARGB(255, 39, 189, 235),
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   ),
                   child: const Text(
