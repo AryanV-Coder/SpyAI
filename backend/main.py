@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import recording_transcript
+from routers import recording_transcript, chat
 
 app = FastAPI()
 
@@ -14,6 +14,7 @@ app.add_middleware(
 )
 
 app.include_router(recording_transcript.router)
+app.include_router(chat.router)
 
 @app.get('/start-server')
 def start_server():
