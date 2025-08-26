@@ -5,7 +5,12 @@ router = APIRouter()
 
 @router.post('/chat')
 async def chat(audio : UploadFile = File(None),text : str = Form(None)):
+
+    # convert auddio to text, gemini ko text hi bhejna hai. Audio agar properly text me convert nahi hui to user ko batana hai ki auddio is not proper.
     if (audio is None and text is not None) :
+        query = sql_query_generator(text)
+        # send this query to database here 
+        # send the return trnascript to transcript refiner with the user prompt.
         pass
     elif (audio is not None and text is None):
         pass
