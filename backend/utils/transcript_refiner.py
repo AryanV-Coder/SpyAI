@@ -32,6 +32,9 @@ def transcript_refiner(transcript : str, user_query : str):
    - Use **Markdown formatting** for better readability
    - Include relevant quotes from the transcript when helpful (use > blockquotes)
    - Structure longer answers with bullet points or numbered lists when appropriate
+   - **DO NOT include any comments, metadata, explanations about your process, or editorial remarks**
+   - **Return ONLY the direct answer**
+   - **Avoid meta-commentary** - don't explain how you arrived at the answer or mention limitations
 
 6. **Answer Quality**:
    - Be specific and detailed when the transcript provides sufficient information
@@ -57,3 +60,5 @@ def transcript_refiner(transcript : str, user_query : str):
     ]
 
     response = model.generate_content(prompt)
+
+    return response.text
