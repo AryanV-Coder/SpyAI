@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from utils.sql_query_generator import sql_query_generator
+from utils.supabase_config import connect_postgres
 
 router = APIRouter()
 
@@ -8,10 +9,34 @@ async def chat(audio : UploadFile = File(None),text : str = Form(None)):
 
     # convert auddio to text, gemini ko text hi bhejna hai. Audio agar properly text me convert nahi hui to user ko batana hai ki auddio is not proper.
     if (audio is None and text is not None) :
+
         query = sql_query_generator(text)
+        print(f"SQL QUERY GENERATED : {query}")
+
+        conn,cursor = connect_postgres()
+
+        try :
+            cursor.execute(query)
+            print("✅ Query Successful !!")
+
+            result = cursor.fetchall()
+            print(f"Response after select query : {result}")
+
+            transcript = ''
+            for row in result :
+                transcript += row[0]
+
+            print(f"Transcript : {transcript}")
+
+        except Exception as e:
+            print(e)
+        
+        cursor.close()
+        conn.close()
+
+        response = transcript_refiner(transcript = transcript, user_query = text)
         # send this query to database here 
         # send the return trnascript to transcript refiner with the user prompt.
-        pass
     elif (audio is not None and text is None):
         pass
     elif (audio is not None and text is not None):

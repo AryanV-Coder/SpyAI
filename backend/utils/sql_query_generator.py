@@ -89,15 +89,7 @@ Now generate the SQL query for the following user request:"""
         elif sql_query.startswith('```'):
             sql_query = sql_query.replace('```', '').strip()
             
-        return {
-            "status": "success",
-            "sql_query": sql_query,
-            "user_query": user_query
-        }
+        return sql_query
         
     except Exception as e:
-        return {
-            "status": "error",
-            "error": str(e),
-            "user_query": user_query
-        }
+        return e
