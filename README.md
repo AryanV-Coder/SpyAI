@@ -1,4 +1,4 @@
-# 🕵️ SpyAI - Intelligent Surveillance System
+# 🕵️ SpyAI - Intelligent Surveillance System (🛠️ currently under developement)
 
 A sophisticated cross-platform application that captures, transcribes, and analyzes audio recordings using advanced AI technology. Built for discreet monitoring with powerful natural language querying capabilities.
 
