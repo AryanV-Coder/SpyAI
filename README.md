@@ -1,5 +1,7 @@
 # 🕵️ SpyAI - Intelligent Surveillance System (🛠️ currently under developement)
 
+> **⚠️ DEVELOPMENT STATUS NOTICE**: This application is currently under active development and is not yet ready for production use. Features are being implemented progressively and may be incomplete or subject to changes.
+
 A sophisticated cross-platform application that captures, transcribes, and analyzes audio recordings using advanced AI technology. Built for discreet monitoring with powerful natural language querying capabilities.
 
 ## 🎯 Overview
