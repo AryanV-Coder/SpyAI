@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from utils.sql_query_generator import sql_query_generator
 from utils.supabase_config import connect_postgres
+from utils.speech_to_text import speech_to_text
+from datetime import datetime
+
 
 router = APIRouter()
 
@@ -38,7 +41,20 @@ async def chat(audio : UploadFile = File(None),text : str = Form(None)):
         # send this query to database here 
         # send the return transcript to transcript refiner with the user prompt.
     elif (audio is not None and text is None):
-        pass
+
+        os.makedirs("user_audio",exist_ok = true)
+        content = await audio.read()
+        audio_file_path = f"user_audio/{datetime.now()}"
+        with open(audio_file_path,'wb') as file:
+            file.write(content)
+        
+        ##### TRY BY JUST IVING THE AUDDIO ILE DIRECTLY TO THIS FUNCTION WITHOUT SAVING IT ANYWHERE
+        audio_text = speech_to_text(audio_file_path)
+        if audio_text is None :
+            pass
+        else :
+            pass
+
     elif (audio is not None and text is not None):
         print ("BOTH AUDIO AND TEXT RECIEVED")
         raise HTTPException(status_code=400,detail = "Don't require both audio and text")
