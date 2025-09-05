@@ -38,6 +38,11 @@ async def chat(audio : UploadFile = File(None),text : str = Form(None)):
         conn.close()
 
         response = transcript_refiner(transcript = transcript, user_query = text)
+
+        return {
+            "status" : "success",
+            "response" : response
+        }
         # send this query to database here 
         # send the return transcript to transcript refiner with the user prompt.
     elif (audio is not None and text is None):
@@ -76,6 +81,11 @@ async def chat(audio : UploadFile = File(None),text : str = Form(None)):
         conn.close()
 
         response = transcript_refiner(transcript = transcript, user_query = text)
+
+        return {
+            "status" : "success",
+            "response" : response
+        }
 
     elif (audio is not None and text is not None):
         print ("BOTH AUDIO AND TEXT RECIEVED")
