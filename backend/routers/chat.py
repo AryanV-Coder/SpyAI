@@ -48,12 +48,34 @@ async def chat(audio : UploadFile = File(None),text : str = Form(None)):
         with open(audio_file_path,'wb') as file:
             file.write(content)
         
-        ##### TRY BY JUST IVING THE AUDDIO ILE DIRECTLY TO THIS FUNCTION WITHOUT SAVING IT ANYWHERE
+        ##### TRY BY JUST GIVING THE AUDIO FILE DIRECTLY TO THIS FUNCTION WITHOUT SAVING IT ANYWHERE
         audio_text = speech_to_text(audio_file_path)
-        if audio_text is None :
-            pass
-        else :
-            pass
+        
+        query = sql_query_generator(audio_text)
+        print(f"SQL QUERY GENERATED : {query}")
+
+        conn,cursor = connect_postgres()
+
+        try :
+            cursor.execute(query)
+            print("✅ Query Successful !!")
+
+            result = cursor.fetchall()
+            print(f"Response after select query : {result}")
+
+            transcript = ''
+            for row in result :
+                transcript += row[0]
+
+            print(f"Transcript : {transcript}")
+
+        except Exception as e:
+            print(e)
+        
+        cursor.close()
+        conn.close()
+
+        response = transcript_refiner(transcript = transcript, user_query = text)
 
     elif (audio is not None and text is not None):
         print ("BOTH AUDIO AND TEXT RECIEVED")
