@@ -2,7 +2,9 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from utils.sql_query_generator import sql_query_generator
 from utils.supabase_config import connect_postgres
 from utils.speech_to_text import speech_to_text
+from utils.transcript_refiner import transcript_refiner
 from datetime import datetime
+import os
 
 
 router = APIRouter()
@@ -47,7 +49,7 @@ async def chat(audio : UploadFile = File(None),text : str = Form(None)):
         # send the return transcript to transcript refiner with the user prompt.
     elif (audio is not None and text is None):
 
-        os.makedirs("user_audio",exist_ok = true)
+        os.makedirs("user_audio",exist_ok = True)
         content = await audio.read()
         audio_file_path = f"user_audio/{datetime.now()}"
         with open(audio_file_path,'wb') as file:
@@ -80,7 +82,7 @@ async def chat(audio : UploadFile = File(None),text : str = Form(None)):
         cursor.close()
         conn.close()
 
-        response = transcript_refiner(transcript = transcript, user_query = text)
+        response = transcript_refiner(transcript = transcript, user_query = audio_text)
 
         return {
             "status" : "success",

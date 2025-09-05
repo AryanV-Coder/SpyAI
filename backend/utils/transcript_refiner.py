@@ -1,4 +1,4 @@
-from gemini import model
+from utils.gemini import model
 
 def transcript_refiner(transcript : str, user_query : str):
     prompt = [
