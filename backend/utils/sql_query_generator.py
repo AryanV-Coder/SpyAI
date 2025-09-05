@@ -1,4 +1,4 @@
-from gemini import model
+from utils.gemini import model
 from datetime import datetime, timedelta
 
 def sql_query_generator(user_query: str):
