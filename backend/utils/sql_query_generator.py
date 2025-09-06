@@ -42,11 +42,10 @@ def sql_query_generator(user_query: str):
    - Parse relative terms like "2 hours ago", "3 days ago", etc.
 
 2. **SQL Query Patterns:**
-   - For exact time: `WHERE timestamp = 'YYYY-MM-DD HH:MM:SS'`
-   - For date range: `WHERE timestamp BETWEEN 'start' AND 'end'`
-   - For partial matching: `WHERE timestamp::date = 'YYYY-MM-DD'` (for specific day)
-   - For time patterns: `WHERE timestamp LIKE 'YYYY-MM-DD%'` or `WHERE DATE(timestamp) = 'YYYY-MM-DD'`
-   - For content search: `WHERE transcript ILIKE '%search_term%'`
+   - For exact time: WHERE timestamp = 'YYYY-MM-DD HH:MM:SS'
+   - For date range: WHERE timestamp BETWEEN 'start' AND 'end'
+   - For partial matching: WHERE timestamp::date = 'YYYY-MM-DD' -> (for specific day)
+   - For time patterns: WHERE timestamp LIKE 'YYYY-MM-DD%' or WHERE DATE(timestamp) = 'YYYY-MM-DD'
 
 3. **Query Types to Handle:**
    - Time-based queries: "Show transcripts from yesterday"
@@ -61,9 +60,8 @@ def sql_query_generator(user_query: str):
    - Include ORDER BY timestamp DESC for better readability
 
 **EXAMPLES:**
-- "yesterday's meeting" → `SELECT * FROM transcripts WHERE DATE(timestamp) = CURRENT_DATE - INTERVAL '1 day' ORDER BY timestamp DESC;`
-- "transcripts from this morning" → `SELECT * FROM transcripts WHERE DATE(timestamp) = CURRENT_DATE AND EXTRACT(hour FROM timestamp) < 12 ORDER BY timestamp DESC;`
-- "find discussions about budget" → `SELECT * FROM transcripts WHERE transcript ILIKE '%budget%' ORDER BY timestamp DESC;`
+- "yesterday's meeting" → SELECT * FROM transcripts WHERE DATE(timestamp) = CURRENT_DATE - INTERVAL '1 day' ORDER BY timestamp DESC;
+- "transcripts from this morning" → SELECT * FROM transcripts WHERE DATE(timestamp) = CURRENT_DATE AND EXTRACT(hour FROM timestamp) < 12 ORDER BY timestamp DESC;
 
 Now generate the SQL query for the following user request:"""
                 }

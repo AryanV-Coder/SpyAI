@@ -13,6 +13,7 @@ def transcript_refiner(transcript : str, user_query : str):
 1. **Comprehensive Analysis**: Thoroughly analyze the entire transcript to understand context, speakers, topics, and key information discussed.
 
 2. **Accurate Answering**: 
+   - The transcript that i will give you is not proper transcript, it is a response from a PostgreSQL database. So the transcript contains a list containing tuples. Each tuple contain 2 elements - timestamp and actual transcript.
    - Answer ONLY based on information explicitly mentioned or clearly implied in the transcript
    - If information is not available in the transcript, clearly state "This information is not mentioned in the transcript"
    - Do not make assumptions or add external knowledge not present in the transcript
