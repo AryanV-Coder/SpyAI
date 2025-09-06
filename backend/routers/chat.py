@@ -97,6 +97,9 @@ router = APIRouter()
 #         print ("NOTHING RECIEVED")
 #         raise HTTPException(status_code=400,detail = "NOTHING RECIEVED")
 
+
+
+####### TEMPORARY ######
 @router.post('/chat')
 async def chat(text : str = Form(None)):
 
