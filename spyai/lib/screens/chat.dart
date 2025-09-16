@@ -37,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     // Add welcome message
     _messages.add(ChatMessage(
-      text: "🕵️ **Welcome to SpyAI Intelligence**\n\nI can help you search and analyze your recorded conversations. Ask me anything about your transcripts!",
+      text: "**Welcome to SpyAI Intelligence**\nI can help you search and analyze your recorded conversations.",
       isUser: false,
       timestamp: DateTime.now(),
     ));
@@ -115,49 +115,20 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildMessage(ChatMessage message) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       child: Row(
         mainAxisAlignment: message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!message.isUser) ...[
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: const Color.fromARGB(255, 123, 167, 217),
-              child: const Icon(
-                Icons.smart_toy_outlined,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 8),
-          ],
+          if (message.isUser) const Spacer(flex: 2),
           Flexible(
+            flex: 7,
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: message.isUser 
-                    ? const Color.fromARGB(255, 123, 167, 217)
-                    : const Color.fromARGB(150, 10, 21, 37),
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(20),
-                  topRight: const Radius.circular(20),
-                  bottomLeft: message.isUser ? const Radius.circular(20) : const Radius.circular(5),
-                  bottomRight: message.isUser ? const Radius.circular(5) : const Radius.circular(20),
-                ),
-                border: Border.all(
-                  color: message.isUser 
-                      ? Colors.transparent
-                      : const Color.fromARGB(100, 123, 167, 217),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                    ? const Color.fromARGB(255, 10, 21, 37)
+                    : const Color.fromARGB(30, 123, 167, 217),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,8 +138,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       message.text,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        height: 1.4,
                       ),
                     )
                   else
@@ -177,27 +148,27 @@ class _ChatScreenState extends State<ChatScreen> {
                       styleSheet: MarkdownStyleSheet(
                         p: const TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 15,
                           height: 1.4,
                         ),
                         h1: const TextStyle(
                           color: Color.fromARGB(255, 123, 167, 217),
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                         ),
                         h2: const TextStyle(
                           color: Color.fromARGB(255, 123, 167, 217),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
                         h3: const TextStyle(
                           color: Color.fromARGB(255, 123, 167, 217),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
                         strong: const TextStyle(
-                          color: Color.fromARGB(255, 123, 167, 217),
-                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                         em: const TextStyle(
                           color: Colors.white70,
@@ -205,7 +176,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         code: const TextStyle(
                           color: Color.fromARGB(255, 255, 200, 100),
-                          backgroundColor: Color.fromARGB(100, 0, 0, 0),
+                          backgroundColor: Color.fromARGB(50, 0, 0, 0),
                           fontFamily: 'monospace',
                         ),
                         blockquote: const TextStyle(
@@ -217,214 +188,166 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ),
                     ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _formatTime(message.timestamp),
-                    style: TextStyle(
-                      color: message.isUser ? Colors.white70 : Colors.white38,
-                      fontSize: 12,
+                  const SizedBox(height: 6),
+                  Align(
+                    alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
+                    child: Text(
+                      _formatTime(message.timestamp),
+                      style: const TextStyle(
+                        color: Colors.white38,
+                        fontSize: 11,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          if (message.isUser) ...[
-            const SizedBox(width: 8),
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: const Color.fromARGB(255, 10, 21, 37),
-              child: const Icon(
-                Icons.person_outline,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-          ],
+          if (!message.isUser) const Spacer(flex: 2),
         ],
       ),
     );
   }
 
   String _formatTime(DateTime timestamp) {
-    return "${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}";
+    final hour = timestamp.hour;
+    final minute = timestamp.minute;
+    final period = hour >= 12 ? 'PM' : 'AM';
+    final displayHour = hour == 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    return "${displayHour.toString()}:${minute.toString().padLeft(2, '0')} $period";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 3, 28, 48),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 10, 21, 37),
-        elevation: 0,
-        title: const Row(
+      backgroundColor: const Color(0xFF031C30),
+      body: SafeArea(
+        child: Column(
           children: [
-            Icon(
-              Icons.chat_bubble_outline,
-              color: Color.fromARGB(255, 123, 167, 217),
-              size: 24,
+            // Messages List
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                itemCount: _messages.length + (_isLoading ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == _messages.length && _isLoading) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            flex: 7,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(30, 123, 167, 217),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Color.fromARGB(255, 123, 167, 217),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text(
+                                    'Analyzing...',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Spacer(flex: 2),
+                        ],
+                      ),
+                    );
+                  }
+                  return _buildMessage(_messages[index]);
+                },
+              ),
             ),
-            SizedBox(width: 8),
-            Text(
-              'SpyAI Intelligence',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+            // Input Area
+            Container(
+              padding: const EdgeInsets.all(20),
+              color: const Color(0xFF031C30),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(20, 123, 167, 217),
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(
+                          color: const Color.fromARGB(50, 123, 167, 217),
+                          width: 1,
+                        ),
+                      ),
+                      child: TextField(
+                        controller: _textController,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: 'Ask about your recordings...',
+                          hintStyle: TextStyle(
+                            color: Colors.white38,
+                            fontSize: 15,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 14,
+                          ),
+                        ),
+                        onSubmitted: _sendMessage,
+                        enabled: !_isLoading,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 123, 167, 217),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: IconButton(
+                      onPressed: _isLoading ? null : () => _sendMessage(_textController.text),
+                      icon: _isLoading
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : const Icon(
+                              Icons.arrow_upward_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
-        centerTitle: false,
-      ),
-      body: Column(
-        children: [
-          // Messages List
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              itemCount: _messages.length + (_isLoading ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == _messages.length && _isLoading) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: const Color.fromARGB(255, 123, 167, 217),
-                          child: const Icon(
-                            Icons.smart_toy_outlined,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(150, 10, 21, 37),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: const Color.fromARGB(100, 123, 167, 217),
-                              width: 1,
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color.fromARGB(255, 123, 167, 217),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 12),
-                              Text(
-                                'Analyzing...',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return _buildMessage(_messages[index]);
-              },
-            ),
-          ),
-          // Input Area
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 10, 21, 37),
-              border: Border(
-                top: BorderSide(
-                  color: Color.fromARGB(100, 123, 167, 217),
-                  width: 1,
-                ),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(100, 3, 28, 48),
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: const Color.fromARGB(100, 123, 167, 217),
-                        width: 1,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: _textController,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: 'Ask about your recordings...',
-                        hintStyle: TextStyle(
-                          color: Colors.white38,
-                          fontSize: 16,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
-                        ),
-                      ),
-                      onSubmitted: _sendMessage,
-                      enabled: !_isLoading,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 123, 167, 217),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 123, 167, 217).withOpacity(0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    onPressed: _isLoading ? null : () => _sendMessage(_textController.text),
-                    icon: _isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
-                        : const Icon(
-                            Icons.send_rounded,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

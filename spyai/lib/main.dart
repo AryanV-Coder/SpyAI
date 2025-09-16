@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         Uri.parse('$baseUrl/start-server'),
         headers: {'Content-Type': 'application/json'},
       );
-      
+
       if (response.statusCode == 200) {
         print('✅ Server started successfully');
       } else {
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Call start-server endpoint when app builds (app starts)
     _startServer();
-    
-    return MaterialApp(home: TabsScreen());
+
+    return MaterialApp(home: TabsScreen(), debugShowCheckedModeBanner: false);
   }
 }
