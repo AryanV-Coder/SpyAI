@@ -16,7 +16,11 @@ class AppStrings {
   static const String audioUploaded = 'Audio uploaded successfully';
   
   // Chat screen
-  static const String chatWelcomeMessage = '**Welcome to SpyAI Intelligence**\nI can help you search and analyze your recorded conversations.';
+  static const String chatWelcomeMessage = '''**Welcome to SpyAI Intelligence**
+
+I can help you search and analyze your recorded conversations.
+
+Ask me anything about your meetings!''';
   static const String chatInputHint = 'Ask about your recordings...';
   static const String analyzingMessage = 'Analyzing...';
   static const String noResponseReceived = 'No response received';
