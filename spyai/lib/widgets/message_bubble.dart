@@ -84,41 +84,104 @@ class MessageBubble extends StatelessWidget {
       p: const TextStyle(
         color: AppColors.primaryText,
         fontSize: 15,
-        height: 1.4,
+        height: 1.5,
       ),
       h1: const TextStyle(
         color: AppColors.accent,
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
       ),
       h2: const TextStyle(
         color: AppColors.accent,
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: FontWeight.w600,
+        height: 1.3,
       ),
       h3: const TextStyle(
         color: AppColors.accent,
         fontSize: 16,
         fontWeight: FontWeight.w600,
+        height: 1.3,
       ),
       strong: const TextStyle(
         color: AppColors.primaryText,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w700,
       ),
       em: const TextStyle(
-        color: AppColors.secondaryText,
+        color: AppColors.accent,
         fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w500,
       ),
       code: const TextStyle(
-        color: Color(0xFFFFC864),
-        backgroundColor: Color.fromARGB(50, 0, 0, 0),
+        color: Color(0xFFFFE066),
+        backgroundColor: Color.fromARGB(80, 0, 0, 0),
         fontFamily: 'monospace',
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
       ),
+      codeblockDecoration: BoxDecoration(
+        color: const Color.fromARGB(100, 0, 0, 0),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: const Color.fromARGB(50, 123, 167, 217),
+          width: 1,
+        ),
+      ),
+      codeblockPadding: const EdgeInsets.all(12),
       blockquote: const TextStyle(
         color: AppColors.secondaryText,
         fontStyle: FontStyle.italic,
+        fontSize: 14,
+      ),
+      blockquoteDecoration: BoxDecoration(
+        color: const Color.fromARGB(30, 123, 167, 217),
+        border: const Border(
+          left: BorderSide(
+            color: AppColors.accent,
+            width: 3,
+          ),
+        ),
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(4),
+          bottomRight: Radius.circular(4),
+        ),
+      ),
+      blockquotePadding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 8,
       ),
       listBullet: const TextStyle(
+        color: AppColors.accent,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+      listIndent: 16,
+      tableHead: const TextStyle(
+        color: AppColors.accent,
+        fontWeight: FontWeight.w600,
+        fontSize: 14,
+      ),
+      tableBody: const TextStyle(
+        color: AppColors.primaryText,
+        fontSize: 14,
+      ),
+      tableBorder: TableBorder.all(
+        color: const Color.fromARGB(100, 123, 167, 217),
+        width: 1,
+      ),
+      tableCellsPadding: const EdgeInsets.all(8),
+      a: const TextStyle(
+        color: AppColors.accent,
+        decoration: TextDecoration.underline,
+        decorationColor: AppColors.accent,
+      ),
+      del: const TextStyle(
+        color: AppColors.secondaryText,
+        decoration: TextDecoration.lineThrough,
+        decorationColor: AppColors.secondaryText,
+      ),
+      checkbox: const TextStyle(
         color: AppColors.accent,
       ),
     );
