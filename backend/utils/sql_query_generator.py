@@ -53,7 +53,12 @@ def sql_query_generator(user_query: str):
    - Combined queries: "Show yesterday's transcripts about budget"
    - Range queries: "Transcripts between 2pm and 4pm today"
 
-4. **Output Format:**
+4. **How to handle content based queries:**
+   - When searching for a specific content. Search using both Hindi and English.
+   Eg. If you are going to generate a query like this - SELECT * FROM transcripts WHERE DATE(timestamp) = '2025-09-10' AND transcript ILIKE '%data structures%';
+   Then generate it like this - SELECT * FROM transcripts WHERE DATE(timestamp) = '2025-09-10' AND (transcript ILIKE '%data structures%' OR transcript ILIKE '%डेटा स्ट्रक्चर्स%');
+
+5. **Output Format:**
    - Return ONLY the SQL query, no explanations or extra text
    - Use proper PostgreSQL syntax
    - Always use single quotes for string literals
