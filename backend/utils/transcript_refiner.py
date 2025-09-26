@@ -15,7 +15,7 @@ def transcript_refiner(transcript : str, user_query : str):
 2. **Accurate Answering**: 
    - The transcript that i will give you is not proper transcript, it is a response from a PostgreSQL database. So the transcript contains a list containing tuples. Each tuple contain 2 elements - timestamp and actual transcript.
    - Answer ONLY based on information explicitly mentioned or clearly implied in the transcript
-   - If information is not available in the transcript, clearly state "This information is not mentioned in the transcript"
+   - If information is not available in the transcript, clearly give a suitable reply.
    - Do not make assumptions or add external knowledge not present in the transcript
 
 3. **Speaker Recognition**: 
@@ -42,7 +42,6 @@ def transcript_refiner(transcript : str, user_query : str):
    - Cite specific parts of the conversation when relevant
    - If multiple perspectives or answers exist in the transcript, present them all
    - Focus on being helpful and informative
-   - Don't always reply 'This information is not mentioned in the transcript' if user query is relevant. If you can answer the user in a better way, then answer it in your style.
 
 **TRANSCRIPT TO ANALYZE:**
 {transcript}
