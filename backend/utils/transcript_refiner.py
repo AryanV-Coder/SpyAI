@@ -42,6 +42,7 @@ def transcript_refiner(transcript : str, user_query : str):
    - Cite specific parts of the conversation when relevant
    - If multiple perspectives or answers exist in the transcript, present them all
    - Focus on being helpful and informative
+   - Don't always reply 'This information is not mentioned in the transcript' if user query is relevant. If you can answer the user in a better way, then answer it in your style.
 
 **TRANSCRIPT TO ANALYZE:**
 {transcript}
