@@ -60,6 +60,8 @@ def sql_query_generator(user_query: str):
 
 5. **Output Format:**
    - Return ONLY the SQL query, no explanations or extra text
+   - Never return anything which is not a SQL query even if you can't generate a SQL query.
+   - Try to take out the indepth meaning of user query and generate the SQL query based on that info. User can give any unexpected natural language input.
    - Use proper PostgreSQL syntax
    - Always use single quotes for string literals
    - Include ORDER BY timestamp DESC for better readability
