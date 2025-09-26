@@ -15,7 +15,7 @@ def transcript_refiner(transcript : str, user_query : str):
 2. **Accurate Answering**: 
    - The transcript that i will give you is not proper transcript, it is a response from a PostgreSQL database. So the transcript contains a list containing tuples. Each tuple contain 2 elements - timestamp and actual transcript.
    - Answer ONLY based on information explicitly mentioned or clearly implied in the transcript
-   - If information is not available in the transcript, clearly give a suitable reply.
+   - If information is not available in the transcript, clearly give a suitable reply like a normal chatbot. Don't let them know that you are getting transcripts as input. Don't tell them that the transcript don't conatin information. Tell them that "You have no meetings on [DAY or TIME or MONTH]" or something similar to that.
    - Do not make assumptions or add external knowledge not present in the transcript
 
 3. **Speaker Recognition**: 
