@@ -134,9 +134,7 @@ API_BASE_URL=http://127.0.0.1:8000
 - [x] Timestamp tracking and attribution
 
 ### 🚧 In Development
-- [ ] **Chat interface** for querying transcripts
 - [ ] **Advanced search functionality** with filters
-- [ ] **Real-time transcription** during recording
 - [ ] **Export capabilities** (PDF, Word, JSON)
 - [ ] **User authentication** and multi-user support
 - [ ] **Cloud storage integration** (AWS S3, Google Cloud)
