@@ -32,6 +32,16 @@ jobs:
         run: pod repo update
         working-directory: spyai/ios
 
+      # ---------------------------------------------------------
+      # NEW STEP: Forcefully disable signing in Xcode project settings
+      # This prevents the "Requires Development Team" error
+      # ---------------------------------------------------------
+      - name: Disable Code Signing
+        run: |
+          sed -i '' 's/CODE_SIGNING_ALLOWED = YES/CODE_SIGNING_ALLOWED = NO/g' ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGNING_REQUIRED = YES/CODE_SIGNING_REQUIRED = NO/g' ios/Runner.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = ""/g' ios/Runner.xcodeproj/project.pbxproj
+
       - name: Build iOS
         run: flutter build ios --release --no-codesign
 
